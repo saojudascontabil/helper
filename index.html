@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ação – São José do Rio Preto | Descarte Consciente</title>
+    <meta name="description" content="Mapeamento de locais de descarte consciente (reciclagem e eletrônicos) em São José do Rio Preto. Encontre o ponto de coleta mais próximo!">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis de Cores e Estilos baseados no design Rocketseat (Escuro + Gradientes) */
+        :root {
+            --color-primary: #8B5CF6; /* Roxo/Índigo Principal (Ex: Botões, Destaque) */
+            --color-accent: #34D399; /* Verde/Ciano de Destaque (Ex: CTAs) */
+            --color-background-dark: #0D0D18; /* Fundo mais escuro */
+            --color-background-light: #1A1A2E; /* Fundo de Seção/Card */
+            --color-text-light: #E5E7EB; /* Texto principal */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background-dark);
+            color: var(--color-text-light);
+            scroll-behavior: smooth;
+        }
+        /* Animação de entrada suave */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Texto com efeito Gradiente */
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--color-primary), var(--color-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 211, 153, 0.6);
+        }
+        /* Estilo para garantir que apenas o conteúdo visível ocupe espaço na tela */
+        .page-section {
+            display: block; /* Padrão para section */
+        }
+        .page-section.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar Fixa e Responsiva -->
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-sm shadow-xl border-b border-white/10">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold text-white tracking-wider">
+                Eco <span class="gradient-text">Ação</span>
+            </a>
+            
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#sobre" class="text-gray-300 hover:text-white transition duration-200">Sobre</a>
+                <a href="#mapa" class="text-gray-300 hover:text-white transition duration-200">Mapa</a>
+                <a href="#blog" class="text-gray-300 hover:text-white transition duration-200">Notícias</a>
+                <a href="#contato" class="text-gray-300 hover:text-white transition duration-200">Contato</a>
+            </div>
+
+
+            <!-- Menu Mobile Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        
+        <!-- Menu Mobile (oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/90 pb-4">
+            <a href="#sobre" class="block py-2 px-8 text-sm text-gray-300 hover:bg-white/10" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Sobre</a>
+            <a href="#mapa" class="block py-2 px-8 text-sm text-gray-300 hover:bg-white/10" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Mapa</a>
+            <a href="#blog" class="block py-2 px-8 text-sm text-gray-300 hover:bg-white/10" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Notícias</a>
+            <a href="#contato" class="block py-2 px-8 text-sm text-gray-300 hover:bg-white/10" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Contato</a>
+            <a href="#mapa" class="block py-3 mx-8 mt-2 text-center bg-[var(--color-accent)] hover:bg-green-300 text-gray-900 font-semibold rounded-lg transition duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Ver Mapa</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção Home (Hero) -->
+        <section id="home" class="page-section min-h-screen flex items-center justify-center text-center px-4 pt-24 pb-16 bg-[var(--color-background-dark)]">
+            <div class="max-w-4xl mx-auto reveal">
+                <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight mb-6">
+                    <span class="gradient-text block">Eco Ação</span> – São José do Rio Preto
+                </h1>
+                <p class="text-xl sm:text-2xl text-gray-400 mb-10">
+                    Descubra pontos de descarte consciente e ajude a construir uma cidade mais verde.
+                </p>
+                <a href="#mapa" class="cta-button inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-xl shadow-lg bg-[var(--color-accent)] text-gray-900 hover:bg-green-300 transition duration-300 transform">
+                    Ver Mapa
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Seção Sobre -->
+        <section id="sobre" class="page-section py-20 sm:py-32 px-4 bg-[var(--color-background-light)] reveal">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-6 text-white text-center">
+                    <span class="gradient-text">Missão</span> da Eco Ação
+                </h2>
+                <div class="grid md:grid-cols-2 gap-12 mt-10">
+                    <div class="reveal">
+                        <p class="text-lg text-gray-400 mb-6">
+                            A Eco Ação nasceu da necessidade de conectar a comunidade de São José do Rio Preto com soluções práticas e acessíveis para o descarte correto de resíduos. Acreditamos que a sustentabilidade é construída com pequenas ações diárias e informação clara.
+                        </p>
+                        <p class="text-lg text-gray-400 mb-6">
+                            Nossa missão é educar, inspirar e conectar você a uma rede de locais confiáveis, transformando o "o que fazer com o meu lixo?" em uma resposta simples e imediata. Do óleo de cozinha ao eletrônico quebrado, cada item tem um destino correto.
+                        </p>
+                        <ul class="space-y-4 text-gray-300">
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 mr-3 text-[var(--color-accent)] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-base">Impacto Ambiental Reduzido: Diminui a contaminação do solo e da água.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 mr-3 text-[var(--color-accent)] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-base">Ação Coletiva: Conectando pessoas comprometidas com o meio ambiente.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 mr-3 text-[var(--color-accent)] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-base">Educação e Inspiração: Informação clara sobre o ciclo dos resíduos.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Imagem/Ilustração da Seção Sobre -->
+                    <div class="flex justify-center items-center reveal">
+                        <div class="w-full h-72 bg-[var(--color-background-dark)] rounded-2xl shadow-2xl flex flex-col items-center justify-center p-8 border border-white/20">
+                            <svg class="w-20 h-20 text-[var(--color-accent)] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <p class="text-xl font-semibold text-gray-300 text-center">O Círculo da Sustentabilidade</p>
+                            <p class="text-sm text-gray-500 text-center mt-1">Transformando pequenas ações em grandes mudanças.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Mapa de Locais -->
+        <section id="mapa" class="page-section py-20 sm:py-32 px-4 bg-[var(--color-background-dark)] reveal">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-white text-center">
+                    Onde Descartar <span class="gradient-text">em Rio Preto</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-12 text-center">Use os filtros para encontrar o ponto de coleta ideal para o seu resíduo.</p>
+
+                <div class="bg-[var(--color-background-light)] p-6 sm:p-8 rounded-xl shadow-2xl border border-white/10">
+                    
+                    <!-- Filtros (Checkboxes) -->
+                    <div class="mb-8 p-4 bg-white/5 rounded-lg border border-white/10">
+                        <h3 class="text-lg font-semibold mb-3 text-white">Filtrar por Tipo de Descarte:</h3>
+                        <div id="filter-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm font-medium">
+                            <!-- Checkboxes serão preenchidas via JS a partir do dataMap -->
+                        </div>
+                    </div>
+
+                    <!-- Visualização do Mapa (Placeholder com Iframe) -->
+                    <div class="aspect-video bg-gray-900 rounded-xl mb-8 border-4 border-[var(--color-primary)] overflow-hidden reveal">
+                        <iframe 
+                            src="https://maps.google.com/maps?q=São%20José%20do%20Rio%20Preto%20reciclagem&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            aria-hidden="false" 
+                            tabindex="0"
+                            title="Mapa interativo de São José do Rio Preto com pontos de descarte"
+                        ></iframe>
+                        <p class="sr-only">O mapa interativo será carregado acima.</p>
+                    </div>
+
+                    <!-- Lista de Locais (Simulação de Resultados do Mapa) -->
+                    <h3 class="text-3xl font-bold mb-6 text-white reveal">Pontos Encontrados</h3>
+                    <div id="locations-list" class="space-y-6">
+                        <!-- Locais serão injetados e filtrados via JavaScript -->
+                    </div>
+
+                    <p id="no-results" class="hidden text-center py-10 text-xl text-gray-500 reveal">
+                        Nenhum local encontrado para os filtros selecionados.
+                    </p>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Contato -->
+        <section id="contato" class="page-section py-20 sm:py-32 px-4 bg-[var(--color-background-light)] reveal">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-white">
+                    <span class="gradient-text">Fale</span> Conosco
+                </h2>
+                <p class="text-xl text-gray-400 mb-12">Tem dúvidas, sugestões ou quer firmar uma parceria? Envie-nos uma mensagem.</p>
+                
+                <div class="p-8 bg-[var(--color-background-dark)] rounded-xl shadow-2xl border border-white/10">
+                    <form id="contact-form" class="space-y-4 text-left">
+                        <input type="text" id="contact-nome" placeholder="Seu Nome" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]">
+                        <input type="email" id="contact-email" placeholder="Seu Email" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]">
+                        <textarea id="contact-mensagem" placeholder="Sua Mensagem..." rows="5" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"></textarea>
+                        <button type="submit" class="w-full cta-button bg-[var(--color-primary)] text-white font-bold py-3 rounded-lg hover:bg-indigo-500 transition duration-300 shadow-lg">
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção Blog/Notícias (Preview de 3 posts) -->
+        <section id="blog" class="page-section py-20 sm:py-32 px-4 bg-[var(--color-background-dark)] reveal">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-white text-center">
+                    <span class="gradient-text">Notícias</span> e Dicas
+                </h2>
+                <p class="text-xl text-gray-400 mb-12 text-center">Fique por dentro das novidades sobre sustentabilidade em Rio Preto e no mundo.</p>
+
+                <div id="blog-posts-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Cards de Blog (Preview) serão injetados via JavaScript -->
+                </div>
+                
+                <div class="mt-16 text-center reveal">
+                    <a id="view-all-posts-btn" href="javascript:void(0)" class="inline-flex items-center text-lg font-semibold text-[var(--color-accent)] hover:text-green-300 transition duration-300">
+                        Ver todas as notícias
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Full Blog/Todas as Notícias (A nova "página" que será exibida) -->
+        <section id="full-blog" class="page-section py-20 sm:py-32 px-4 bg-[var(--color-background-light)] hidden">
+            <div class="max-w-7xl mx-auto">
+                <button id="back-to-home-blog" class="mb-10 inline-flex items-center text-base font-semibold text-gray-400 hover:text-[var(--color-primary)] transition duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Voltar à Página Principal
+                </button>
+
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-8 text-white">
+                    Arquivo Completo de <span class="gradient-text">Notícias</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-12">Artigos completos e todo o arquivo de conteúdo sobre sustentabilidade.</p>
+
+                <div id="full-blog-posts-container" class="grid grid-cols-1 gap-8">
+                    <!-- Todos os posts do blog serão injetados aqui -->
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modal de feedback do Formulário de Contato (GLOBAL) -->
+    <div id="contact-message" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4">
+        <div class="bg-[var(--color-background-light)] p-8 rounded-xl max-w-sm text-center shadow-2xl">
+            <h3 class="text-3xl font-bold text-[var(--color-accent)] mb-4">Mensagem Enviada!</h3>
+            <p class="text-gray-400 mb-6">Agradecemos o seu contato. Retornaremos em breve.</p>
+            <button onclick="document.getElementById('contact-message').classList.add('hidden'); document.getElementById('contact-message').classList.remove('flex');" class="px-6 py-2 bg-[var(--color-primary)] hover:bg-indigo-500 rounded-lg text-white font-medium">Fechar</button>
+        </div>
+    </div>
+
+
+    <!-- Rodapé -->
+    <footer class="bg-black border-t border-white/10 py-12 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            
+            <div class="col-span-2 md:col-span-1">
+                <h4 class="text-xl font-bold mb-4 text-white">Eco Ação</h4>
+                <p class="text-gray-400">Transformando a atitude de descarte em São José do Rio Preto.</p>
+                <!-- Redes Sociais no Rodapé -->
+                <div class="flex space-x-4 mt-4">
+                    <a href="https://instagram.com/eco_acaosjrp" target="_blank" class="text-gray-400 hover:text-[var(--color-primary)] transition duration-200" title="Instagram">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12c0 4.238 2.75 7.848 6.556 9.176.353.064.482-.153.482-.346 0-.172-.006-.628-.01-1.233-2.67.58-3.235-1.285-3.235-1.285-.436-1.107-1.064-1.399-1.064-1.399-.873-.595.066-.584.066-.584.965.068 1.474.992 1.474.992.86 1.467 2.25.992 2.793.758.087-.588.337-.992.613-1.222-2.13-.243-4.363-1.065-4.363-4.721 0-1.04.37-1.888 0-2.55-.104-.26-.448-1.21.1-2.545 0 0 .847-.25 2.775.95.8-.222 1.65-.333 2.5-.337.85.004 1.7.115 2.5.337 1.928-1.2 2.775-.95 2.775-.95.548 1.335.204 2.285.1 2.545.67.662.37 1.51.37 2.55 0 3.665-2.233 4.47-4.363 4.72.348.3.66.892.66 1.794 0 1.29-.01 2.33-.01 2.646 0 .193.129.41.487.346C19.25 19.848 22 16.238 22 12 22 6.477 17.523 2 12 2z"></path></svg>
+                    </a>
+                    <!-- Outras Redes Sociais Mockadas -->
+                    <a href="#" class="text-gray-400 hover:text-[var(--color-primary)] transition duration-200" title="Facebook">FB</a>
+                    <a href="#" class="text-gray-400 hover:text-[var(--color-primary)] transition duration-200" title="LinkedIn">IN</a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-white">Links Úteis</h4>
+                <ul class="space-y-2">
+                    <li><a href="#sobre" class="text-gray-400 hover:text-white transition duration-200">Nossa Missão</a></li>
+                    <li><a href="#mapa" class="text-gray-400 hover:text-white transition duration-200">Mapa de descarte</a></li>
+                    <li><a href="#contato" class="text-gray-400 hover:text-white transition duration-200">Contato</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-white">Parcerias</h4>
+                <ul class="space-y-2">
+                    <li><a href="https://www.riopreto.sp.gov.br/" target="_blank" class="text-gray-400 hover:text-white transition duration-200">Prefeitura de SJRP</a></li>
+                </ul>
+            </div>
+
+            <!-- Contato conforme solicitado (sem telefone) -->
+            <div>
+                <h4 class="font-semibold mb-4 text-white">Contato</h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="mailto:ecoacaosjrpsp@gmail.com" class="text-gray-400 hover:text-white transition duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            ecoacaosjrpsp@gmail.com
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://instagram.com/eco_acaosjrp" target="_blank" class="text-gray-400 hover:text-white transition duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12c0 4.238 2.75 7.848 6.556 9.176.353.064.482-.153.482-.346 0-.172-.006-.628-.01-1.233-2.67.58-3.235-1.285-3.235-1.285-.436-1.107-1.064-1.399-1.064-1.399-.873-.595.066-.584.066-.584.965.068 1.474.992 1.474.992.86 1.467 2.25.992 2.793.758.087-.588.337-.992.613-1.222-2.13-.243-4.363-1.065-4.363-4.721 0-1.04.37-1.888 0-2.55-.104-.26-.448-1.21.1-2.545 0 0 .847-.25 2.775.95.8-.222 1.65-.333 2.5-.337.85.004 1.7.115 2.5.337 1.928-1.2 2.775-.95 2.775-.95.548 1.335.204 2.285.1 2.545.67.662.37 1.51.37 2.55 0 3.665-2.233 4.47-4.363 4.72.348.3.66.892.66 1.794 0 1.29-.01 2.33-.01 2.646 0 .193.129.41.487.346C19.25 19.848 22 16.238 22 12 22 6.477 17.523 2 12 2z"></path></svg>
+                            @eco_acaosjrp
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <div class="mt-12 pt-8 border-t border-white/10 text-center">
+            <!-- Créditos conforme solicitado (discretos) -->
+            <p class="text-xs text-gray-500">
+                &copy; 2025 Eco Ação. Feito por Matheus Luminatti, Yuri Bacchi, Igor Pedro, Arthur Yuji e Saulo Catropa.
+            </p>
+        </div>
+    </footer>
+
+
+    <script>
+        // --- Dados Mock (Simulação de DB/JSON) ---
+        const dataMap = [
+            { id: 1, name: "Ecoponto Central", type: "Eletrônicos", address: "Rua Exemplo, 123 - Centro", hours: "Seg-Sex, 8h-17h", description: "Ponto principal para descarte de eletrodomésticos, pilhas e baterias." },
+            { id: 2, name: "Cooperativa Recicla +", type: "Papel", address: "Av. do Papel, 456 - Bairro Oeste", hours: "Seg-Sáb, 9h-18h", description: "Foco em papelão, jornais e embalagens de papel. Ajude a gerar renda." },
+            { id: 3, name: "Galpão do Plástico", type: "Plástico", address: "R. da Borracha, 789 - Dist. Industrial", hours: "Apenas Sábados, 8h-12h", description: "Aceita todos os tipos de plástico (PET, PVC, PEAD)." },
+            { id: 4, name: "Ponto de Coleta Orgânico", type: "Orgânico", address: "Praça da Natureza, s/n - Jardim Sul", hours: "Diário, 24h (Composteira Comunitária)", description: "Somente resíduos orgânicos crus para compostagem local." },
+            { id: 5, name: "Eletro Lixo Zero", type: "Eletrônicos", address: "Av. Tecnologia, 101 - Zona Norte", hours: "Seg-Sex, 10h-19h", description: "Especializado em informática, TVs e pequenos eletrônicos." },
+            { id: 6, name: "Descarte Têxtil Rio Preto", type: "Têxtil", address: "Rua da Moda, 202 - Redentora", hours: "Seg-Sex, 8h-17h", description: "Coleta de roupas, calçados e tecidos para doação ou reciclagem." },
+            { id: 7, name: "Vidraria da Paz", type: "Vidro", address: "Av. do Vidro, 10 - Bairro Leste", hours: "Seg-Qui, 14h-18h", description: "Focado em garrafas, potes e vidros planos (janelas)." },
+            { id: 8, name: "Ponto de Coleta de Óleo", type: "Óleo", address: "Rua da Cozinha, 50 - Vila Boa", hours: "Seg-Sex, 8h-17h", description: "Recebe óleo de cozinha usado em garrafas PET fechadas." },
+            { id: 9, name: "Sucata de Metais", type: "Metal", address: "R. do Aço, 20 - Dist. Industrial", hours: "Seg-Sáb, 7h-16h", description: "Coleta de latas, alumínio e outros metais ferrosos e não-ferrosos." },
+            { id: 10, name: "Centro Multicoleta", type: "Multimateriais", address: "Av. Principal, 500 - Centro", hours: "Seg-Sáb, 9h-17h", description: "Aceita Papel, Plástico, Vidro e Metal em grandes volumes." },
+        ];
+
+        // Mapeamento dos tipos de descarte únicos (usados para gerar os filtros)
+        const wasteTypes = [...new Set(dataMap.map(item => item.type))];
+        let activeFilters = new Set();
+        
+        const locationsList = document.getElementById('locations-list');
+        const filterContainer = document.getElementById('filter-container');
+        const noResults = document.getElementById('no-results');
+        const contactMessage = document.getElementById('contact-message');
+
+        // Base de todos os posts (usaremos mais dados para a página completa)
+        const allMockPosts = [
+            { id: 1, title: "Rio Preto e a Lei do Lixo Eletrônico: O que Mudou?", summary: "Entenda as novas regulamentações municipais e como elas afetam o descarte de dispositivos antigos na cidade.", date: "15/Out", content: "Detalhes completos sobre a logística reversa e os pontos de coleta oficiais na cidade de SJRP. Este artigo explora as penalidades e os benefícios para a comunidade." },
+            { id: 2, title: "5 Dicas Simples de Consumo Consciente para o Rio-Pretense", summary: "Pequenas mudanças no seu dia a dia que trazem grande impacto ambiental e financeiro.", date: "28/Set", content: "Desde a escolha de produtos locais até a redução do uso de plástico, aprenda a fazer a diferença sem grandes esforços. A sustentabilidade começa em casa." },
+            { id: 3, title: "Compostagem Caseira: Como Reduzir seu Lixo Orgânico em SJRP", summary: "Um guia rápido para começar a compostar na sua casa ou condomínio em São José do Rio Preto.", date: "05/Set", content: "Passo a passo para iniciar sua composteira, os materiais necessários e como lidar com o clima da região para ter sucesso na redução de orgânicos." },
+            { id: 4, title: "O Desafio do Vidro: Por que a Reciclagem é Tão Importante na Região?", summary: "O vidro é 100% reciclável, mas ainda é um desafio logístico. Descubra os pontos que aceitam este material.", date: "20/Ago", content: "Artigo detalhado sobre as dificuldades e os benefícios da reciclagem de vidro, listando cooperativas parceiras e incentivando o descarte correto." },
+            { id: 5, title: "Voluntariado Ambiental em Rio Preto: Onde e Como Participar?", summary: "Conheça os principais grupos de voluntários e projetos que transformam a realidade da cidade.", date: "01/Ago", content: "Lista de ONGs, datas de mutirões de limpeza de rios e parques, e informações de contato para quem quer colocar a mão na massa." },
+            { id: 6, title: "Inovação Sustentável: Startups de SJRP Focadas em Lixo Zero", summary: "A tecnologia local a serviço do planeta. Conheça as iniciativas mais promissoras.", date: "10/Jul", content: "Entrevistas com fundadores de startups que usam IA e IoT para otimizar a coleta e o reuso de resíduos na área urbana de Rio Preto." },
+        ];
+
+
+        // --- Funções de Renderização e Lógica ---
+
+        /**
+         * Retorna a cor do tag de resíduo.
+         * @param {string} type - Tipo de resíduo.
+         * @returns {string} - Classes Tailwind para cor.
+         */
+        function getColor(type) {
+            switch(type) {
+                case 'Eletrônicos': return 'text-indigo-400 border-indigo-500 bg-indigo-900/50';
+                case 'Plástico': return 'text-sky-400 border-sky-500 bg-sky-900/50';
+                case 'Papel': return 'text-yellow-400 border-yellow-500 bg-yellow-900/50';
+                case 'Vidro': return 'text-blue-400 border-blue-500 bg-blue-900/50';
+                case 'Metal': return 'text-gray-400 border-gray-500 bg-gray-700/50';
+                case 'Orgânico': return 'text-green-400 border-green-500 bg-green-900/50';
+                case 'Óleo': return 'text-orange-400 border-orange-500 bg-orange-900/50';
+                case 'Têxtil': return 'text-pink-400 border-pink-500 bg-pink-900/50';
+                case 'Multimateriais': return 'text-purple-400 border-purple-500 bg-purple-900/50';
+                default: return 'text-gray-400 border-gray-500 bg-gray-700/50';
+            }
+        }
+
+        /**
+         * Renderiza um card de localização do mapa.
+         * @param {Object} location - Objeto de localização.
+         * @returns {string} - HTML do card.
+         */
+        function renderLocationCard(location) {
+            const typeColor = getColor(location.type);
+
+            return `
+                <div class="location-card bg-[var(--color-background-dark)] p-6 rounded-xl shadow-lg border border-white/10 hover:border-[var(--color-accent)] transition duration-300 reveal">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                        <h4 class="text-xl sm:text-2xl font-bold text-white">${location.name}</h4>
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full border mt-2 sm:mt-0 ${typeColor}">${location.type}</span>
+                    </div>
+                    <p class="text-gray-400 mb-2 flex items-center text-sm sm:text-base">
+                        <svg class="w-5 h-5 mr-2 text-[var(--color-primary)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        ${location.address}
+                    </p>
+                    <p class="text-gray-500 mb-4 flex items-center text-sm">
+                        <svg class="w-5 h-5 mr-2 text-[var(--color-accent)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        ${location.hours}
+                    </p>
+                    <p class="text-gray-300 text-sm">${location.description}</p>
+                </div>
+            `;
+        }
+
+        /**
+         * Renderiza a lista de locais aplicando os filtros ativos.
+         */
+        function renderLocations() {
+            // Se nenhum filtro estiver ativo, ativamos todos os tipos para exibir tudo
+            const shouldFilter = activeFilters.size > 0;
+            
+            const filteredLocations = dataMap.filter(location => 
+                !shouldFilter || activeFilters.has(location.type)
+            );
+
+            locationsList.innerHTML = filteredLocations.map(renderLocationCard).join('');
+            
+            if (filteredLocations.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+            
+            // Re-aplicar a lógica de revelação após a renderização
+            checkScrollAnimation();
+        }
+
+        /**
+         * Configura a interface de filtros.
+         */
+        function setupFilters() {
+            wasteTypes.forEach(type => {
+                const id = `filter-${type.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                const labelColor = getColor(type).replace('text-', 'bg-').replace('border-', 'hover:border-');
+                
+                // Remove as classes de cor do texto para usar o texto branco padrão
+                const baseColorClass = labelColor.split(' ').filter(c => !c.includes('text-')).join(' ');
+                
+                // Configurações específicas para o input checkbox
+                const specificColorClass = type === 'Eletrônicos' ? 'bg-indigo-700 hover:bg-indigo-600' : 
+                                           type === 'Plástico' ? 'bg-sky-700 hover:bg-sky-600' : 
+                                           type === 'Papel' ? 'bg-yellow-700 hover:bg-yellow-600' : 
+                                           type === 'Orgânico' ? 'bg-green-700 hover:bg-green-600' : 
+                                           type === 'Têxtil' ? 'bg-pink-700 hover:bg-pink-600' : 
+                                           'bg-gray-700 hover:bg-gray-600';
+
+
+                const html = `
+                    <div>
+                        <input type="checkbox" id="${id}" data-type="${type}" class="hidden peer">
+                        <label for="${id}" class="cursor-pointer block text-center py-2 px-3 rounded-full transition duration-200 ${specificColorClass} text-white opacity-75 peer-checked:opacity-100 peer-checked:ring-2 peer-checked:ring-[var(--color-accent)] peer-checked:shadow-xl">
+                            ${type}
+                        </label>
+                    </div>
+                `;
+                filterContainer.insertAdjacentHTML('beforeend', html);
+            });
+
+            filterContainer.addEventListener('change', (e) => {
+                if (e.target.matches('input[type="checkbox"]')) {
+                    const type = e.target.getAttribute('data-type');
+                    if (e.target.checked) {
+                        activeFilters.add(type);
+                    } else {
+                        activeFilters.delete(type);
+                    }
+                    renderLocations();
+                }
+            });
+        }
+        
+        // --- Animações e Responsividade ---
+
+        /**
+         * Lógica de animação de scroll (Reveal).
+         */
+        function checkScrollAnimation() {
+            const reveals = document.querySelectorAll(".reveal");
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 150; // Inicia a revelação 150px antes de chegar no topo da tela
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    // Opcional: para reverter animação ao rolar para cima
+                    // reveals[i].classList.remove("active");
+                }
+            }
+        }
+        
+        // --- Blog Content Rendering ---
+
+        /**
+         * Renderiza o bloco de posts na seção de preview (máximo 3).
+         */
+        function renderBlogPreview() {
+            const container = document.getElementById('blog-posts-container');
+            const previewPosts = allMockPosts.slice(0, 3); // Apenas os 3 primeiros
+            
+            container.innerHTML = previewPosts.map(post => `
+                <div class="bg-[var(--color-background-light)] p-6 rounded-xl shadow-xl border border-white/10 hover:border-[var(--color-primary)] transition duration-300 reveal">
+                    <span class="text-xs font-semibold text-[var(--color-accent)]">${post.date}</span>
+                    <h4 class="text-xl font-bold mt-2 mb-3 text-white">${post.title}</h4>
+                    <p class="text-gray-400 text-sm mb-4">${post.summary}</p>
+                    <a id="read-post-${post.id}" href="javascript:void(0)" class="text-sm font-semibold text-[var(--color-primary)] hover:text-white transition duration-200 read-post-btn" data-post-id="${post.id}">Leia Mais &rarr;</a>
+                </div>
+            `).join('');
+
+             checkScrollAnimation();
+        }
+
+        /**
+         * Renderiza todos os posts na seção de blog completa.
+         */
+        function renderFullBlogPage() {
+            const container = document.getElementById('full-blog-posts-container');
+            
+            container.innerHTML = allMockPosts.map(post => `
+                <div class="bg-[var(--color-background-dark)] p-6 rounded-xl shadow-lg border border-white/10 reveal">
+                    <span class="text-xs font-semibold text-[var(--color-accent)]">${post.date}</span>
+                    <h4 class="text-2xl font-bold mt-2 mb-3 text-white">${post.title}</h4>
+                    <p class="text-gray-400 text-base font-semibold mb-3">${post.summary}</p>
+                    <p class="text-gray-300 text-sm">${post.content}</p>
+                </div>
+            `).join('');
+
+            checkScrollAnimation();
+        }
+
+        /**
+         * Lógica para mostrar/esconder as seções do blog.
+         */
+        function setupBlogViewToggle() {
+            // Seleciona todas as seções que compõem o layout principal
+            const mainSections = document.querySelectorAll('#home, #sobre, #mapa, #contato, #blog');
+            const fullBlogSection = document.getElementById('full-blog');
+            
+            const viewAllBtn = document.getElementById('view-all-posts-btn');
+            const backBtn = document.getElementById('back-to-home-blog');
+
+            const showMainContent = (scrollToHome = false) => {
+                mainSections.forEach(section => section.classList.remove('hidden', 'page-section-hidden'));
+                fullBlogSection.classList.add('hidden', 'page-section-hidden');
+                
+                if (scrollToHome) {
+                    document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+            
+            const showFullBlog = () => {
+                // Esconde as seções principais, exceto o header/footer (não gerenciados aqui)
+                mainSections.forEach(section => section.classList.add('hidden', 'page-section-hidden'));
+                fullBlogSection.classList.remove('hidden', 'page-section-hidden');
+                
+                // Rola para o topo da nova seção
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // 1. Renderiza o conteúdo da página completa
+            renderFullBlogPage();
+
+            // 2. Listener no botão "Ver todas as notícias"
+            viewAllBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showFullBlog();
+            });
+
+            // 3. Listener no botão "Voltar à Página Principal"
+            backBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showMainContent(true); // Volta ao topo da Home
+            });
+
+            // 4. Listener no menu de navegação (garante que, ao clicar em qualquer outro link, a visão completa seja fechada)
+            document.querySelectorAll('nav a[href*="#"]').forEach(anchor => {
+                anchor.addEventListener('click', () => {
+                    const targetId = anchor.getAttribute('href').substring(1);
+                    if (targetId !== 'full-blog') {
+                        // Se clicou em Home, Sobre, Mapa ou Contato, volta para a visualização principal
+                        showMainContent(targetId === 'home');
+                    }
+                });
+            });
+        }
+
+        /**
+         * Lógica de submissão do formulário de Contato (usando modal).
+         */
+        function setupFormLogic() {
+            const contactMessage = document.getElementById('contact-message');
+
+            // Lógica de Submissão do Formulário de Contato
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Simulação de envio
+                
+                // Exibe a mensagem de sucesso (modal)
+                contactMessage.classList.add('flex');
+                contactMessage.classList.remove('hidden');
+                contactForm.reset();
+            });
+        }
+        
+        // --- Inicialização da Aplicação ---
+
+        window.onload = function() {
+            // 1. Configurar o Menu Mobile
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 2. Lógica de Animação de Scroll
+            window.addEventListener('scroll', checkScrollAnimation);
+            checkScrollAnimation();
+
+            // 3. Configurar e Renderizar Mapa/Locais
+            setupFilters();
+            renderLocations();
+
+            // 4. Carregar Conteúdo do Blog (Preview)
+            renderBlogPreview();
+            
+            // 5. Configurar o sistema de navegação do Blog (Full Page)
+            setupBlogViewToggle();
+
+            // 6. Configurar Formulários
+            setupFormLogic();
+        }
+    </script>
+</body>
+</html>
