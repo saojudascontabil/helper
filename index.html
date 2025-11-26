@@ -38,7 +38,7 @@
             
             <header class="text-center mb-8">
                 <!-- Ícone de Nuvem/Upload -->
-                <svg class="mx-auto w-12 h-12 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 014 4v2m-5 4l-4-4m0 0l-4 4m4-4v12"></path></svg>
+                <svg class="mx-auto w-12 h-12 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 5 0 1115.9 6L16 6a5 5 0 014 4v2m-5 4l-4-4m0 0l-4 4m4-4v12"></path></svg>
                 
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white mt-3">São Judas Helper</h1>
                 <p class="text-base text-gray-500 dark:text-gray-400 mt-1">Anexe e envie documentos de forma rápida e segura.</p>
@@ -48,30 +48,35 @@
             <!-- Formulário de Upload de Arquivo -->
             <form id="dataForm" class="space-y-6">
 
-                <!-- Área de Drag and Drop -->
-                <div id="dropArea" class="drop-area relative flex flex-col items-center justify-center w-full h-56 rounded-xl cursor-pointer bg-white dark:bg-gray-700/50 p-6 text-center">
-                    
-                    <!-- INSTRUÇÕES PADRÃO (Visível sem arquivo) -->
-                    <div id="dropInstructions" class="flex flex-col items-center justify-center h-full w-full">
-                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        <p class="mt-2 text-base text-gray-600 dark:text-gray-300">
-                            <span class="font-semibold text-indigo-600 dark:text-indigo-400">Clique para selecionar</span> ou arraste e solte o arquivo.
-                        </p>
-                    </div>
+                <!-- 1. ÁREA DE DRAG AND DROP E SELEÇÃO DO ARQUIVO DE CONTEÚDO (O que será enviado) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 dark:text-white text-left mb-2">1. Arquivo de Conteúdo (O que será enviado)*</label>
+                    <div id="dropAreaConteudo" class="drop-area relative flex flex-col items-center justify-center w-full h-40 rounded-xl cursor-pointer bg-white dark:bg-gray-700/50 p-6 text-center">
+                        
+                        <!-- INSTRUÇÕES PADRÃO -->
+                        <div id="dropInstructionsConteudo" class="flex flex-col items-center justify-center h-full w-full">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                                <span class="font-semibold text-indigo-600 dark:text-indigo-400">Clique para selecionar</span> ou arraste o documento (PDF, Imagem, etc.).
+                            </p>
+                        </div>
 
-                    <!-- DISPLAY DE INFORMAÇÃO DO ARQUIVO (Visível com arquivo) -->
-                    <div id="fileInfoContainer" class="hidden w-full h-full flex flex-col justify-center items-center">
-                        <!-- Conteúdo dinâmico (ícone, tipo e nome) será injetado aqui -->
+                        <!-- DISPLAY DE INFORMAÇÃO DO ARQUIVO -->
+                        <div id="fileInfoContainerConteudo" class="hidden w-full h-full flex flex-col justify-center items-center">
+                            <span class="text-base font-semibold text-gray-900 dark:text-white truncate max-w-full px-4" id="fileNameConteudo"></span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Conteúdo Pronto</span>
+                        </div>
+                        
+                        <!-- Campo de Arquivo (Conteúdo) -->
+                        <input type="file" id="arquivo_conteudo" name="arquivo_conteudo" class="hidden" required>
                     </div>
-                    
-                    <!-- Campo de Arquivo (Hidden visualmente, mas funcional) -->
-                    <input type="file" id="arquivo" name="arquivo" class="hidden" required>
                 </div>
 
-                <!-- CAMPO DE SELEÇÃO MANUAL DE TIPO DE ARQUIVO -->
+
+                <!-- 2. CAMPO DE SELEÇÃO MANUAL DE TIPO DE ARQUIVO -->
                 <div class="space-y-2">
-                    <label for="tipo_arquivo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left">
-                        Classifique o tipo de arquivo*
+                    <label for="tipo_arquivo" class="block text-sm font-bold text-gray-900 dark:text-white text-left">
+                        2. Classifique o Tipo do Arquivo de Conteúdo*
                     </label>
                     <select id="tipo_arquivo" name="tipo_selecionado" required 
                             class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-colors">
@@ -87,11 +92,67 @@
                         <option value="OUTROS">Outros Tipos / Não Classificado</option>
                     </select>
                 </div>
+
+                <!-- 3. INFORMAÇÕES DO DESTINATÁRIO - MÉTODO -->
+                <div class="space-y-4 rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-700/30">
+                    <label class="block text-sm font-bold text-gray-900 dark:text-white text-left mb-2">3. Escolha o Método de Envio</label>
+                    
+                    <!-- Seleção do Método de Envio -->
+                    <div class="space-y-2">
+                        <label for="metodo_destino" class="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left">
+                            Método de Destino*
+                        </label>
+                        <select id="metodo_destino" name="metodo_destino_selecionado" required 
+                                class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-colors">
+                            <option value="" disabled selected>Como deseja especificar o destino?</option>
+                            <option value="PLANILHA">Planilha de Destinatários (XLSX/CSV)</option>
+                            <option value="TELEFONE_MANUAL">Lista Manual de Números de Telefone (WhatsApp/SMS)</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. ÁREA DINÂMICA (UPLOAD DA PLANILHA OU TEXTO MANUAL) -->
+                    <div id="destinoDinamicoContainer" class="space-y-4">
+
+                        <!-- 4a. CAMPO DE UPLOAD DA PLANILHA (Visível APENAS se PLANILHA for escolhida) -->
+                        <div id="planilhaUploadArea" class="hidden">
+                            <label class="block text-sm font-bold text-gray-900 dark:text-white text-left mb-2">4. Planilha de Destinatários*</label>
+                            <div id="dropAreaPlanilha" class="drop-area relative flex flex-col items-center justify-center w-full h-32 rounded-xl cursor-pointer bg-white dark:bg-gray-700/50 p-4 text-center">
+                                
+                                <div id="dropInstructionsPlanilha" class="flex flex-col items-center justify-center h-full w-full">
+                                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                                        <span class="font-semibold text-green-600 dark:text-green-400">Clique/Arraste</span> a planilha (XLSX ou CSV) com os números.
+                                    </p>
+                                </div>
+
+                                <div id="fileInfoContainerPlanilha" class="hidden w-full h-full flex flex-col justify-center items-center">
+                                    <span class="text-sm font-semibold text-gray-900 dark:text-white truncate max-w-full px-4" id="fileNamePlanilha"></span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Planilha de Destino Anexada</span>
+                                </div>
+
+                                <input type="file" id="arquivo_planilha" name="arquivo_planilha" class="hidden">
+                            </div>
+                        </div>
+
+                        <!-- 4b. CAMPO DE TEXTO MANUAL (Visível APENAS se TELEFONE_MANUAL for escolhido) -->
+                        <div id="manualInputArea" class="hidden space-y-2">
+                            <label for="dados_destino" id="dadosDestinoLabel" class="block text-sm font-bold text-gray-900 dark:text-white text-left">
+                                4. Lista Manual de Números de Telefone (um por linha)*
+                            </label>
+                            <textarea id="dados_destino" name="dados_destino_input" rows="4"
+                                placeholder="5511987654321&#10;5521998765432"
+                                class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-colors resize-none"></textarea>
+                            <p id="dadosDestinoHelp" class="text-xs text-gray-500 dark:text-gray-400">
+                                Insira números completos (código do país + DDD + número), um por linha.
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Botão de Envio -->
                 <button type="submit" id="submitBtn"
                         class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out disabled:bg-gray-400 disabled:shadow-none">
-                    <span id="buttonText">Enviar Documento</span>
+                    <span id="buttonText">Enviar Arquivo</span>
                     <svg id="loadingSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -106,7 +167,7 @@
     </div>
 
     <script>
-        // Webhook fixo para o sistema de backend (o usuário não precisa ver)
+        // Webhook fixo para o sistema de backend
         const N8N_WEBHOOK_URL = 'https://criadordigital-n8n-editor.zcepry.easypanel.host/webhook-test/site';
         
         const dataForm = document.getElementById('dataForm');
@@ -114,13 +175,28 @@
         const submitBtn = document.getElementById('submitBtn');
         const buttonText = document.getElementById('buttonText');
         const loadingSpinner = document.getElementById('loadingSpinner');
-        const fileInput = document.getElementById('arquivo');
-        const dropArea = document.getElementById('dropArea');
-        const tipoArquivoSelect = document.getElementById('tipo_arquivo'); // Novo elemento
+        const tipoArquivoSelect = document.getElementById('tipo_arquivo');
 
-        // Elementos de controle de visibilidade
-        const dropInstructions = document.getElementById('dropInstructions');
-        const fileInfoContainer = document.getElementById('fileInfoContainer');
+        // ELEMENTOS DO ARQUIVO DE CONTEÚDO (Passo 1)
+        const fileInputConteudo = document.getElementById('arquivo_conteudo');
+        const dropAreaConteudo = document.getElementById('dropAreaConteudo');
+        const dropInstructionsConteudo = document.getElementById('dropInstructionsConteudo');
+        const fileInfoContainerConteudo = document.getElementById('fileInfoContainerConteudo');
+        const fileNameConteudo = document.getElementById('fileNameConteudo');
+
+
+        // ELEMENTOS DO DESTINATÁRIO (Passos 3 & 4)
+        const metodoDestinoSelect = document.getElementById('metodo_destino');
+        // Planilha
+        const planilhaUploadArea = document.getElementById('planilhaUploadArea');
+        const fileInputPlanilha = document.getElementById('arquivo_planilha');
+        const dropAreaPlanilha = document.getElementById('dropAreaPlanilha');
+        const dropInstructionsPlanilha = document.getElementById('dropInstructionsPlanilha');
+        const fileInfoContainerPlanilha = document.getElementById('fileInfoContainerPlanilha');
+        const fileNamePlanilha = document.getElementById('fileNamePlanilha');
+        // Manual
+        const manualInputArea = document.getElementById('manualInputArea');
+        const dadosDestinoInput = document.getElementById('dados_destino');
 
 
         // --- Funções de UI e Estado ---
@@ -132,121 +208,143 @@
         }
 
         /**
-         * Retorna o ícone SVG apropriado e informações de cor para o tipo de arquivo.
-         * Esta função ainda é usada para fornecer feedback VISUAL ao usuário.
-         * @param {string} fileName O nome do arquivo com extensão.
-         * @returns {{type: string, color: string, icon: string}} O tipo, a classe de cor e o SVG.
+         * Atualiza a exibição de nome e ícone para o campo de CONTEÚDO
          */
-        function getFileTypeInfo(fileName) {
-            const extension = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
-            
-            let type = extension ? extension.toUpperCase() : 'Outros';
-            let color = 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-100'; // Default
-            let icon = `<svg class="w-16 h-16 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`; // Ícone de arquivo padrão
-
-            // Mapeamento visual simplificado por extensão
-            if (['pdf'].includes(extension)) {
-                type = 'PDF'; color = 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-red-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 4v-2h2v2h-2zm-2 2v-2h2v2h-2zm4 0v-2h2v2h-2z"/><path d="M5 21h14c1.1 0 2-.9 2-2v-3h-2v3H5v-3H3v3c0 1.1.9 2 2 2z"/></svg>`;
-            } else if (['doc', 'docx'].includes(extension)) {
-                type = 'WORD'; color = 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zM13 9V3.5L18.5 9H13z"/></svg>`;
-            } else if (['xls', 'xlsx', 'csv'].includes(extension)) {
-                type = 'EXCEL'; color = 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-green-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 16V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4zM5 11h3V7H5v4zm5 0h3V7h-3v4zm5 0h3V7h-3v4zM5 15h3v-4H5v4zm5 0h3v-4h-3v4zm5 0h3v-4h-3v4z"/></svg>`;
-            } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension)) {
-                type = 'IMAGEM'; color = 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
-            } else if (['mp4', 'mov', 'avi', 'webm', 'mkv'].includes(extension)) {
-                type = 'VÍDEO'; color = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
-            } else if (['mp3', 'wav', 'ogg'].includes(extension)) {
-                type = 'ÁUDIO'; color = 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg>`;
-            } else if (['zip', 'rar', '7z', 'tar'].includes(extension)) {
-                type = 'COMPACTADO'; color = 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m-8-4v-10l8-4m0 0v10l8 4"></path></svg>`;
-            } else if (['txt', 'rtf'].includes(extension)) {
-                type = 'TEXTO'; color = 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300';
-                icon = `<svg class="w-16 h-16 mb-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>`;
-            }
-
-            return { type, color, icon };
-        }
-
-
-        async function handleFileSelection(files) {
+        function handleFileSelectionConteudo(files) {
             if (files.length > 0) {
                 const file = files[0];
                 
                 // Atribui o arquivo ao input
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
-                fileInput.files = dataTransfer.files;
+                fileInputConteudo.files = dataTransfer.files;
 
-                // Detecta o tipo de arquivo para feedback VISUAL
-                const { type, color, icon } = getFileTypeInfo(file.name);
+                dropInstructionsConteudo.classList.add('hidden');
+                fileInfoContainerConteudo.classList.remove('hidden');
+                fileNameConteudo.textContent = file.name;
                 
-                // Esconde as instruções e mostra a informação do arquivo
-                dropInstructions.classList.add('hidden');
-                fileInfoContainer.classList.remove('hidden');
-
-                // Atualiza o display com o ícone, tipo e nome (mais explícito)
-                fileInfoContainer.innerHTML = `
-                    ${icon} <!-- Ícone do tipo de arquivo -->
-                    <div class="px-4 py-2 rounded-lg text-xl font-extrabold ${color.replace('-100', '-300').replace('-900/40', '-900/60')} text-gray-900 dark:text-white mb-3 shadow-md">
-                        ${type}
-                    </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Pronto para envio:</p>
-                    <span class="text-base font-semibold text-gray-900 dark:text-white truncate max-w-full px-4">${file.name}</span>
-                `;
-                
-                dropArea.classList.remove('drop-area-hover');
+                dropAreaConteudo.classList.remove('drop-area-hover');
                 statusMessage.classList.add('hidden');
             } else {
                 // Reseta a exibição quando nenhum arquivo é selecionado
-                dropInstructions.classList.remove('hidden'); // MOSTRAR instruções
-                fileInfoContainer.classList.add('hidden'); // ESCONDER informações do arquivo
+                dropInstructionsConteudo.classList.remove('hidden');
+                fileInfoContainerConteudo.classList.add('hidden');
+                fileInputConteudo.value = '';
             }
         }
         
-        // --- Lógica de Drag and Drop e Clique ---
+        /**
+         * Atualiza a exibição de nome e ícone para o campo de PLANILHA
+         */
+        function handleFileSelectionPlanilha(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                
+                // Atribui o arquivo ao input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInputPlanilha.files = dataTransfer.files;
 
-        // Abre o seletor de arquivo ao clicar na área de drop
-        dropArea.addEventListener('click', () => fileInput.click());
+                dropInstructionsPlanilha.classList.add('hidden');
+                fileInfoContainerPlanilha.classList.remove('hidden');
+                fileNamePlanilha.textContent = file.name;
+                
+                dropAreaPlanilha.classList.remove('drop-area-hover');
+                statusMessage.classList.add('hidden');
+            } else {
+                // Reseta a exibição quando nenhum arquivo é selecionado
+                dropInstructionsPlanilha.classList.remove('hidden');
+                fileInfoContainerPlanilha.classList.add('hidden');
+                fileInputPlanilha.value = '';
+            }
+        }
 
-        // Atualiza a exibição do nome do arquivo ao usar o seletor de arquivo
-        fileInput.addEventListener('change', () => {
-            handleFileSelection(fileInput.files);
-        });
 
-        // Previne o comportamento padrão (abrir arquivo no navegador) para permitir o drop
+        /**
+         * Controla a visibilidade e obrigatoriedade dos campos de destino.
+         */
+        function updateDestinoInput() {
+            const method = metodoDestinoSelect.value;
+            
+            // Estado inicial: Oculta ambos e desobriga
+            planilhaUploadArea.classList.add('hidden');
+            manualInputArea.classList.add('hidden');
+            dadosDestinoInput.required = false;
+            fileInputPlanilha.required = false;
+            statusMessage.classList.add('hidden');
+            
+            // Limpa o estado anterior
+            dadosDestinoInput.value = '';
+            handleFileSelectionPlanilha([]);
+
+
+            if (method === 'TELEFONE_MANUAL') {
+                manualInputArea.classList.remove('hidden');
+                dadosDestinoInput.required = true;
+                // Exibe uma dica de UX
+                displayStatus('Atenção: Por favor, insira os números de telefone no campo abaixo (um por linha). O arquivo de Conteúdo será enviado para estes números.', 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-300');
+
+            } else if (method === 'PLANILHA') {
+                planilhaUploadArea.classList.remove('hidden');
+                fileInputPlanilha.required = true;
+                // Exibe a instrução crucial sobre a Planilha
+                displayStatus('CRUCIAL: O arquivo anexado no Passo 1 (Conteúdo) será enviado aos números encontrados na Planilha anexada no Passo 4. A Planilha deve ser XLSX ou CSV.', 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300');
+            }
+        }
+
+        // Listener para o campo de seleção do método de destino
+        metodoDestinoSelect.addEventListener('change', updateDestinoInput);
+        
+        // Inicializa o estado do campo de destino ao carregar
+        document.addEventListener('DOMContentLoaded', updateDestinoInput);
+
+        // --- Lógica de Drag and Drop e Clique (CONTEÚDO) ---
+
+        // Abre o seletor de arquivo de conteúdo ao clicar
+        dropAreaConteudo.addEventListener('click', () => fileInputConteudo.click());
+        fileInputConteudo.addEventListener('change', () => handleFileSelectionConteudo(fileInputConteudo.files));
+
+        // Lógica de Drag and Drop (Conteúdo)
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
+            dropAreaConteudo.addEventListener(eventName, preventDefaults, false);
         });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropAreaConteudo.addEventListener(eventName, () => dropAreaConteudo.classList.add('drop-area-hover'), false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropAreaConteudo.addEventListener(eventName, () => dropAreaConteudo.classList.remove('drop-area-hover'), false);
+        });
+        dropAreaConteudo.addEventListener('drop', (e) => {
+            handleFileSelectionConteudo(e.dataTransfer.files);
+        }, false);
+        
+        // --- Lógica de Drag and Drop e Clique (PLANILHA) ---
 
+        // Abre o seletor de arquivo de planilha ao clicar
+        dropAreaPlanilha.addEventListener('click', () => fileInputPlanilha.click());
+        fileInputPlanilha.addEventListener('change', () => handleFileSelectionPlanilha(fileInputPlanilha.files));
+
+        // Lógica de Drag and Drop (Planilha)
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropAreaPlanilha.addEventListener(eventName, preventDefaults, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropAreaPlanilha.addEventListener(eventName, () => dropAreaPlanilha.classList.add('drop-area-hover'), false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropAreaPlanilha.addEventListener(eventName, () => dropAreaPlanilha.classList.remove('drop-area-hover'), false);
+        });
+        dropAreaPlanilha.addEventListener('drop', (e) => {
+            handleFileSelectionPlanilha(e.dataTransfer.files);
+        }, false);
+
+        // Previne o comportamento padrão global (para o drag-drop funcionar)
         function preventDefaults (e) {
             e.preventDefault();
             e.stopPropagation();
         }
-
-        // Adiciona a classe de hover visualmente na área de drop
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.add('drop-area-hover'), false);
-        });
-
-        // Remove a classe de hover visualmente na área de drop
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove('drop-area-hover'), false);
-        });
-        
-        // Lógica de Soltar (Drop)
-        dropArea.addEventListener('drop', (e) => {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-            handleFileSelection(files);
-        }, false);
+        document.body.addEventListener('dragenter', preventDefaults, false);
+        document.body.addEventListener('dragover', preventDefaults, false);
 
 
         // --- Lógica de Envio do Formulário ---
@@ -255,53 +353,84 @@
             event.preventDefault();
 
             const tipoSelecionado = tipoArquivoSelect.value;
+            const metodoDestinoSelecionado = metodoDestinoSelect.value;
+            const dadosDestino = dadosDestinoInput.value.trim();
             
-            // 1. Validação do Arquivo e do Tipo
-            if (fileInput.files.length === 0) {
-                 displayStatus('Por favor, selecione ou arraste um arquivo para enviar.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
-                return;
+            // 1. Validação do Arquivo de Conteúdo (Sempre obrigatório)
+            if (fileInputConteudo.files.length === 0) {
+                 displayStatus('Passo 1: Por favor, selecione o arquivo de Conteúdo para enviar.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
+                 return;
             }
             if (!tipoSelecionado) {
-                 displayStatus('Por favor, classifique o tipo de arquivo no campo 1.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
-                return;
+                 displayStatus('Passo 2: Por favor, classifique o tipo do Arquivo de Conteúdo.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
+                 return;
+            }
+
+            // 2. Validação Específica do Destinatário (Passo 3/4)
+            if (!metodoDestinoSelecionado) {
+                 displayStatus('Passo 3: Por favor, selecione um Método de Envio.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
+                 return;
+            }
+
+            if (metodoDestinoSelecionado === 'TELEFONE_MANUAL' && dadosDestino === '') {
+                 displayStatus('Passo 4: Por favor, insira os números de telefone manualmente.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
+                 return;
+            }
+
+            if (metodoDestinoSelecionado === 'PLANILHA' && fileInputPlanilha.files.length === 0) {
+                 displayStatus('Passo 4: Por favor, anexe a Planilha de Destinatários.', 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300');
+                 return;
             }
 
 
             // Coleta dos dados do formulário
             const formDataPayload = new FormData();
             
-            // ANEXOS OBRIGATÓRIOS:
-            formDataPayload.append('arquivo', fileInput.files[0]);
-            // Esta linha envia o valor simplificado e em caixa alta (ex: "PDF") para o Webhook
-            formDataPayload.append('tipo_selecionado', tipoSelecionado); 
+            // ARQUIVOS:
+            formDataPayload.append('arquivo_conteudo', fileInputConteudo.files[0]);
+            // Planilha só é enviada se existir (se o método for PLANILHA)
+            if (metodoDestinoSelecionado === 'PLANILHA' && fileInputPlanilha.files.length > 0) {
+                formDataPayload.append('arquivo_planilha', fileInputPlanilha.files[0]);
+            }
+            
+            // DADOS:
+            formDataPayload.append('tipo_selecionado', tipoSelecionado);
+            formDataPayload.append('metodo_destino', metodoDestinoSelecionado);
+            if (dadosDestino) {
+                formDataPayload.append('dados_destino', dadosDestino); // Números manuais
+            }
             
             // METADADOS OPCIONAIS:
             formDataPayload.append('timestamp', new Date().toISOString());
 
-            // 2. Estado de Carregamento
+            // 3. Estado de Carregamento
             submitBtn.disabled = true;
             buttonText.textContent = 'Enviando...';
             loadingSpinner.classList.remove('hidden');
             statusMessage.classList.add('hidden');
 
             try {
-                // 3. Chamada à API (Webhook)
+                // 4. Chamada à API (Webhook)
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     body: formDataPayload 
                 });
 
-                // 4. Tratamento da Resposta
+                // 5. Tratamento da Resposta
                 if (response.ok || response.status === 200) {
                     displayStatus(
                         'Sucesso! Arquivo enviado com sucesso.',
                         'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300'
                     );
-                    // Limpa o campo de arquivo, reseta a exibição e o select
-                    fileInput.value = ''; 
+                    // Limpa os campos após o sucesso
+                    fileInputConteudo.value = '';
+                    fileInputPlanilha.value = '';
                     tipoArquivoSelect.value = '';
-                    dropInstructions.classList.remove('hidden');
-                    fileInfoContainer.classList.add('hidden');
+                    metodoDestinoSelect.value = '';
+                    
+                    // Reseta a exibição
+                    updateDestinoInput(); // Esconde/reseta os campos de destino
+                    handleFileSelectionConteudo([]); // Reseta o display do conteúdo
 
                 } else {
                     // Erro HTTP do servidor
@@ -314,16 +443,16 @@
                 }
 
             } catch (error) {
-                // 5. Tratamento de Erro de Rede/Fetch
+                // 6. Tratamento de Erro de Rede/Fetch
                 console.error('Erro de rede ao enviar:', error);
                 displayStatus(
                     `Erro de conexão. Verifique sua rede e tente novamente.`,
                     'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
                 );
             } finally {
-                // 6. Finaliza o Estado de Carregamento
+                // 7. Finaliza o Estado de Carregamento
                 submitBtn.disabled = false;
-                buttonText.textContent = '2. Enviar Documento';
+                buttonText.textContent = 'Enviar Arquivo';
                 loadingSpinner.classList.add('hidden');
             }
         });
